@@ -1,0 +1,21 @@
+type file
+id Plough.DynamicQuery
+version 0.0.0
+authors Demetrix
+owners Demetrix
+title Plough.DynamicQuery
+description
+  Library to design dynamic query api using dapper and simple querying DSL. DynamicQuery has compatibility with F# Fable.
+licenseExpression Apache-2.0
+licenseUrl https://licenses.nuget.org/Apache-2.0
+repositoryUrl https://github.com/demetrixbio/Plough
+copyright Demetrix 2021
+tags fsharp plough
+dependencies
+  FSharp.Core >= 5.0
+  Plough.ControlFlow ~> 0.4.0
+  Dapper ~> 2.0.78
+files
+  src/Plough.DynamicQuery/bin/Release ==> lib
+  src/Plough.DynamicQuery/*.fsproj ==> fable
+  src/Plough.DynamicQuery/*.fs ==> fable
