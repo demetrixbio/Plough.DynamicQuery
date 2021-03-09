@@ -1,2 +1,5 @@
 ## New in 0.1.0 (Released 2021/03/09)
 * Release initial DynamicQuery library of Plough
+
+## New in 0.4.0 (Released 2021/03/09)
+* Version bump for DynamicQuery library of Plough to remove previous package error
