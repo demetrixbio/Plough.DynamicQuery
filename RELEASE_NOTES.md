@@ -3,3 +3,6 @@
 
 ## New in 0.4.0 (Released 2021/03/09)
 * Version bump for DynamicQuery library of Plough to remove previous package error
+
+## New in 0.4.1 (Released 2021/03/10)
+* FSharp.Core dependency relaxed 4.7.2
