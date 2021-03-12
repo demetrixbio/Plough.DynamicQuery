@@ -30,6 +30,7 @@ module QueryInterpreter =
     let mapString = function
         | Operation.String.Equals value -> "=", value |> box
         | Operation.String.Like value -> "LIKE", value |> box
+        | Operation.String.ILike value -> "ILIKE", value |> box
      
     let mapBool = function
         | Operation.Bool.Equals value -> "=", value |> box

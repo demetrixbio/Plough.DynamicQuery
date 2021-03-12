@@ -78,7 +78,7 @@ module Operation =
     type Int = int Algebraic    
     type Decimal = decimal Algebraic    
     type Timestamp = DateTime Algebraic    
-    type String = | Equals of string | Like of string
+    type String = | Equals of string | Like of string | ILike of string
     type Bool = | Equals of bool
     type 'a Category = | Equals of 'a
     type 'a Set = | Any of 'a [] | Neither of 'a []
@@ -114,6 +114,7 @@ type [<AbstractClass>] StringConstraint<'predicate when 'predicate :> IPredicate
     inherit Constraint<string, Operation.String, 'predicate>()
     member x.Equals (value : string) = Operation.String.Equals value |> x.Apply |> Simple
     member x.Like (value : string) = Operation.String.Like value |> x.Apply |> Simple
+    member x.ILike (value : string) = Operation.String.ILike value |> x.Apply |> Simple
 
 type [<AbstractClass>] BoolConstraint<'predicate when 'predicate :> IPredicate>() =
     inherit Constraint<bool, Operation.Bool, 'predicate>()
