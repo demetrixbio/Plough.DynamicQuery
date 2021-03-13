@@ -1,6 +1,6 @@
 type file
 id Plough.DynamicQuery
-version 0.0.0
+version 0.4.3
 authors Demetrix
 owners Demetrix
 title Plough.DynamicQuery
@@ -13,7 +13,7 @@ copyright Demetrix 2021
 tags fsharp plough
 dependencies
   FSharp.Core >= 4.7.2
-  Plough.ControlFlow >= 0.4.1
+  Plough.ControlFlow >= 0.4.2
   Dapper >= 2.0.78
 files
   src/Plough.DynamicQuery/bin/Release ==> lib

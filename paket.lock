@@ -7,7 +7,7 @@ NUGET
     Fable.Core (3.2.4)
       FSharp.Core (>= 4.7.2)
     FSharp.Core (4.7.2) - redirects: force
-    Plough.ControlFlow (0.4.1)
+    Plough.ControlFlow (0.4.2)
       Fable.Core (>= 3.2.4 < 3.3)
       FSharp.Core (>= 4.7.2)
       Ply (>= 0.3.1 < 0.4)

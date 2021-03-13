@@ -9,3 +9,6 @@
 
 ## New in 0.4.2 (Released 2021/03/12)
 * ILike text operator added
+
+## New in 0.4.3 (Released 2021/03/13)
+* Conflicting Plough library fixed

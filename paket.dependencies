@@ -4,7 +4,7 @@ storage: none
 framework: net5.0, netstandard2.0
 
 nuget FSharp.Core = 4.7.2 redirects: force
-nuget Plough.ControlFlow >= 0.4.1
+nuget Plough.ControlFlow >= 0.4.2
 nuget Dapper
 
 group test
