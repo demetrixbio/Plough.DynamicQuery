@@ -12,3 +12,6 @@
 
 ## New in 0.4.3 (Released 2021/03/13)
 * Conflicting Plough library fixed
+
+## New in 0.4.4 (Released 2021/06/22)
+* Conflicting Plough library fixed
