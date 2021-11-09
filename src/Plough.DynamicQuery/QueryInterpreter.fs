@@ -60,9 +60,9 @@ module QueryInterpreter =
         let valueRef = Guid.NewGuid().ToString("N");
         state.Parameters.Add(valueRef, p)
         sprintf "%s %s @%s" column op valueRef
-            
-    let mapToSql query state mapSimple =
-        let predicates = translate state mapSimple query |> sprintf "%s"
+         
+    let mapToSql query (state : State) mapSimple =
+        let predicates = translate state mapSimple query |> sprintf "(%s)"
         let mutable acc = SqlBuilder.init state.Template state.Parameters |> SqlBuilder.where predicates None
         for join in state.InnerJoins |> Seq.collect (fun s -> s.Value) do
             acc <- acc |> SqlBuilder.innerJoin join None
