@@ -1,7 +1,6 @@
 namespace Plough.DynamicQuery
 
 open System
-open Plough.ControlFlow
 
 type PageQuery() =
     member val PageSize = 50L with get, set
@@ -33,26 +32,6 @@ module ResourceList =
           PageSize = resourceList.PageSize
           PageIndex = resourceList.PageIndex
           TotalItemCount = resourceList.TotalItemCount }
-   
-    #if !FABLE_COMPILER
-
-    // 'valueAsSucceed' is not handled by fable compiler, so given function is excluded from frontend
-    let rec private batchImpl
-                        (getPage: int64 -> int64 -> Async<ResourceList<'a>>)
-                        pageIndex
-                        pageSize
-                        (processPage: 'a list -> TaskEither<unit>) =
-        taskEither {
-            let! currentPage = getPage pageIndex pageSize |> Async.StartAsTask
-            do! currentPage.Items |> processPage
-            if int64 currentPage.Items.Length = currentPage.PageSize then
-                return! batchImpl getPage (pageIndex + 1L) pageSize processPage
-        }
-
-    let batch getPage pageSize processPage = batchImpl getPage 0L pageSize processPage
-
-    #endif
-    
 type Condition = And | Or
 
 type IPredicate = interface end

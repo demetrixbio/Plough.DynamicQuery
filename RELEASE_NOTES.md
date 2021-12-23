@@ -18,3 +18,6 @@
 
 ## New in 0.4.5 (Released 2021/11/09)
 * Fix QueryInterpreter.mapToSql - in case of custom where in template - top level AND/OR precedence is ignored
+
+## New in 1.0.0 (Released 2021/12/23)
+* F# 6 support; Removed Plough.ControlFlow dependency
