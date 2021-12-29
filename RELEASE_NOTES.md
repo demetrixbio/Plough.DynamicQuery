@@ -21,3 +21,6 @@
 
 ## New in 1.0.0 (Released 2021/12/23)
 * F# 6 support; Removed Plough.ControlFlow dependency
+
+## New in 1.0.1 (Released 2021/12/29)
+* Relaxed F# dependency to F# 4.7.0
