@@ -59,7 +59,7 @@ module QueryInterpreter =
     let toSql state column (op, p) =
         let valueRef = Guid.NewGuid().ToString("N");
         state.Parameters.Add(valueRef, p)
-        sprintf "%s %s @%s" column op valueRef
+        $"%s{column} %s{op} @%s{valueRef}"
          
     let mapToSql query (state : State) mapSimple =
         let predicates = translate state mapSimple query |> sprintf "(%s)"
