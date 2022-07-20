@@ -2,12 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Plough.ControlFlow.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Plough.DynamicQuery\Plough.DynamicQuery.fsproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Test.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>  

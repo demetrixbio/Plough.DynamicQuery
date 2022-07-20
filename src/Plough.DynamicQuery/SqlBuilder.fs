@@ -25,10 +25,10 @@ type private Clauses =
 
 // Pagination
 type PageInfo(?index: int64, ?size: int64, ?orderColumns: (string * SortDirection) list, ?calculateTotalCount: bool) =
-    member _.Index = defaultArg index 0L
-    member _.Size = defaultArg size 50L
-    member _.OrderColumns = defaultArg orderColumns []
-    member _.CalculateTotalCount = defaultArg calculateTotalCount true
+    member __.Index = defaultArg index 0L
+    member __.Size = defaultArg size 50L
+    member __.OrderColumns = defaultArg orderColumns []
+    member __.CalculateTotalCount = defaultArg calculateTotalCount true
 
 module internal Helpers =
     open System.Text.RegularExpressions
@@ -110,7 +110,7 @@ type SqlBuilder private (template : string, parameters : DynamicParameters) =
                       Prefix = prefix |> Option.defaultValue ""
                       Postfix = postfix |> Option.defaultValue ""
                       Items = List() }
-                data[name] <- result
+                data.[name] <- result
                 result
             | true, result -> result
         { Sql = sql

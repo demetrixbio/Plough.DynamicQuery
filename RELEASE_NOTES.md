@@ -27,3 +27,6 @@
 
 ## New in 2.0.0 (Released 2022/07/20)
 * New DSL with Common / Array / Set / Algebraic operator support; Postgresql predicate translation.
+
+## New in 2.0.1 (Released 2022/07/20)
+* Revert to old DSL till operator overloading issues are resolved 
