@@ -24,3 +24,6 @@
 
 ## New in 1.0.1 (Released 2021/12/29)
 * Relaxed F# dependency to F# 4.7.0
+
+## New in 2.0.0 (Released 2022/07/20)
+* New DSL with Common / Array / Set / Algebraic operator support; Postgresql predicate translation.
