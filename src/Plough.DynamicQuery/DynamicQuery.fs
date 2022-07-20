@@ -53,14 +53,24 @@ module Operation =
         | NotEq of 'a
     
     [<RequireQualifiedAccess>]
-    type SetOp<'a> =
+    type ArrayOp<'a> =
         | Any of array<'a>
         | Neither of array<'a>
     
     [<RequireQualifiedAccess>]
+    type Set<'a> =
+        | Common of CommonOp<'a>
+        /// Does the first set contain the second, that is, does each element appearing in the second set equal some element of the first set?
+        | Contains of array<'a>
+        /// Is the first set contained by the second?
+        | ContainedBy of array<'a>
+        /// Do the sets overlap, that is, have any elements in common?
+        | Overlap of array<'a>
+    
+    [<RequireQualifiedAccess>]
     type Algebraic<'a> =
         | Common of CommonOp<'a>
-        | Set of SetOp<'a>
+        | Array of ArrayOp<'a>
         | GreaterThen of 'a
         | LessThen of 'a
         | GreaterThenOrEquals of 'a
@@ -79,7 +89,7 @@ module Operation =
     [<RequireQualifiedAccess>]
     type String =
         | Common of CommonOp<System.String>
-        | Set of SetOp<System.String>
+        | Array of ArrayOp<System.String>
         | Like of System.String
         | ILike of System.String
     
@@ -90,21 +100,10 @@ module Operation =
     [<RequireQualifiedAccess>]
     type Guid =
         | Common of CommonOp<System.Guid>
-        | Set of SetOp<System.Guid>
+        | Array of ArrayOp<System.Guid>
     
-    [<RequireQualifiedAccess>]
-    type Set<'a> =
-        | Common of CommonOp<'a>
-        /// Does the first set contain the second, that is, does each element appearing in the second set equal some element of the first set?
-        | Contains of array<'a>
-        /// Is the first set contained by the second?
-        | ContainedBy of array<'a>
-        /// Do the sets overlap, that is, have any elements in common?
-        | Overlap of array<'a>
-
-[<AutoOpen>] 
-module DSL =
-    type IsNullOp = private | IsNullOp with
+module Operators =
+    type IsNullOp = | IsNullOp with
         static member (?<-) (predicate:Operation.String -> #IPredicate, IsNullOp, IsNullOp) =
             Operation.CommonOp.IsNull |> Operation.String.Common |> predicate |> Simple
 
@@ -120,14 +119,14 @@ module DSL =
         static member (?<-) (predicate:Operation.Set<'a> -> #IPredicate, IsNullOp, IsNullOp) =
             Operation.CommonOp.IsNull |> Operation.Set.Common |> predicate |> Simple
 
-    type EqOp = private | EqOp with
+    type EqOp = | EqOp with
         static member inline (?<-) (a, EqOp, b) = a =. b
         
         static member (?<-) (predicate:Operation.String -> #IPredicate, EqOp, value : string) =
             Operation.CommonOp.Eq value |> Operation.String.Common |> predicate |> Simple
            
-        static member (?<-) (predicate:Operation.String -> #IPredicate, EqOp, value : Operation.SetOp<string>) =
-            Operation.String.Set value |> predicate |> Simple
+        static member (?<-) (predicate:Operation.String -> #IPredicate, EqOp, value : Operation.ArrayOp<string>) =
+            Operation.String.Array value |> predicate |> Simple
             
         static member (?<-) (predicate:Operation.Bool -> #IPredicate, EqOp, value : bool) =
             Operation.CommonOp.Eq value |> Operation.Bool.Common |> predicate |> Simple
@@ -135,19 +134,19 @@ module DSL =
         static member (?<-) (predicate:Operation.Guid -> #IPredicate, EqOp, value : System.Guid) =
             Operation.CommonOp.Eq value |> Operation.Guid.Common |> predicate |> Simple
             
-        static member (?<-) (predicate:Operation.Guid -> #IPredicate, EqOp, value : Operation.SetOp<System.Guid>) =
-            Operation.Guid.Set value |> predicate |> Simple
+        static member (?<-) (predicate:Operation.Guid -> #IPredicate, EqOp, value : Operation.ArrayOp<System.Guid>) =
+            Operation.Guid.Array value |> predicate |> Simple
         
         static member (?<-) (predicate:Operation.Algebraic<'a> -> #IPredicate, EqOp, value : 'a) =
             Operation.CommonOp.Eq value |> Operation.Algebraic.Common |> predicate |> Simple
           
-        static member (?<-) (predicate:Operation.Algebraic<'a> -> #IPredicate, EqOp, value : Operation.SetOp<'a>) =
-            Operation.Algebraic.Set value |> predicate |> Simple
+        static member (?<-) (predicate:Operation.Algebraic<'a> -> #IPredicate, EqOp, value : Operation.ArrayOp<'a>) =
+            Operation.Algebraic.Array value |> predicate |> Simple
             
         static member (?<-) (predicate:Operation.Set<'a> -> #IPredicate, EqOp, value : 'a) =
             Operation.CommonOp.Eq value |> Operation.Set.Common |> predicate |> Simple
                 
-    type NotEq = private | NotEq with 
+    type NotEq = | NotEq with 
         static member inline (?<-) (a, NotEq, b) = a !=. b
         
         static member (?<-) (predicate:Operation.String -> #IPredicate, NotEq, value : string) =
@@ -165,14 +164,14 @@ module DSL =
         static member (?<-) (predicate:Operation.Set<'a> -> #IPredicate, NotEq, value : 'a) =
             Operation.CommonOp.NotEq value |> Operation.Set.Common |> predicate |> Simple
                 
-    type GreaterThenOp = private | GreaterThenOp with
+    type GreaterThenOp = | GreaterThenOp with
         static member inline (?<-) (a, GreaterThenOp, b) = a >. b
         
         static member (?<-) (predicate:Operation.Algebraic<'a> -> #IPredicate, GreaterThenOp, value : 'a) =
             Operation.Algebraic.GreaterThen value |> predicate |> Simple
                 
 
-    type GreaterThenOrEqualsOp = private | GreaterThenOrEqualsOp with
+    type GreaterThenOrEqualsOp = | GreaterThenOrEqualsOp with
         static member inline (?<-) (a, GreaterThenOrEqualsOp, b) = a >=. b
         
         static member (?<-) (predicate:Operation.Algebraic<'a> -> #IPredicate, GreaterThenOrEqualsOp, value : 'a) =
@@ -181,13 +180,13 @@ module DSL =
         static member (?<-) (predicate:Operation.Set<'a> -> #IPredicate, GreaterThenOrEqualsOp, value : array<'a>) =
             Operation.Set.Contains value |> predicate |> Simple
 
-    type LessThenOp = private | LessThenOp with   
+    type LessThenOp = | LessThenOp with   
         static member inline (?<-) (a, LessThenOp, b) = a <. b
         
         static member (?<-) (predicate:Operation.Algebraic<'a> -> #IPredicate, LessThenOp, value : 'a) =
             Operation.Algebraic.LessThen value |> predicate |> Simple
 
-    type LessThenOrEqualsOp = private | LessThenOrEqualsOp with
+    type LessThenOrEqualsOp = | LessThenOrEqualsOp with
         static member inline (?<-) (a, LessThenOrEqualsOp, b) = a <=. b
         
         static member (?<-) (predicate:Operation.Algebraic<'a> -> #IPredicate, LessThenOrEqualsOp, value : 'a) =
@@ -196,38 +195,51 @@ module DSL =
         static member (?<-) (predicate:Operation.Set<'a> -> #IPredicate, LessThenOrEqualsOp, value : array<'a>) =
             Operation.Set.ContainedBy value |> predicate |> Simple
 
-    type OverlapOp = private | OverlapOp with
+    type OverlapOp = | OverlapOp with
         static member inline (?<-) (a, OverlapOp, b) = a ^. b
         
         static member (?<-) (predicate:Operation.Set<'a> -> #IPredicate, OverlapOp, value : array<'a>) =
             Operation.Set.Overlap value |> predicate |> Simple
 
-    type LikeOp = private | LikeOp with
+    type LikeOp = | LikeOp with
         static member inline (?<-) (a, LikeOp, b) = a =~. b
         
         static member (?<-) (predicate:Operation.String -> #IPredicate, LikeOp, value : string) =
             Operation.String.Like value |> predicate |> Simple
 
-    type ILikeOp = private | ILikeOp with
+    type ILikeOp = | ILikeOp with
         static member inline (?<-) (a, ILikeOp, b) = a =~*. b
         
         static member (?<-) (predicate:Operation.String -> #IPredicate, ILikeOp, value : string) =
             Operation.String.ILike value |> predicate |> Simple
+
+
+[<AutoOpen>] 
+module DSL =
+    open Operators
     
+    /// IS NULL.
     let inline ISNULL a = a ? (IsNullOp) <- IsNullOp
     
+    /// IS A (identity function).
     let inline IS (predicate : Filter<#IPredicate>) = predicate
     
+    /// NOT A.
     let inline NOT (predicate : Filter<#IPredicate>) = Filter.Not predicate
     
+    /// A AND B.
     let inline AND predicates = Complex { Condition = And; Predicates = predicates }
     
+    /// A OR B.
     let inline OR predicates = Complex { Condition = Or; Predicates = predicates }
 
-    let inline ANY value = Operation.SetOp.Any value
+    /// Array contains any value.
+    let inline ANY value = Operation.ArrayOp.Any value
     
-    let inline NEITHER value = Operation.SetOp.Neither value
+    /// Array doesn't contain any of values.
+    let inline NEITHER value = Operation.ArrayOp.Neither value
     
+    /// A AND B
     let inline (&&.) x y =
         match x, y with
         | Simple simple, Complex { Condition = And; Predicates = predicates }
@@ -239,6 +251,7 @@ module DSL =
             { Condition = And
               Predicates = [ x; y ] } |> Complex
 
+    /// A OR B.
     let inline (||.) x y =
         match x, y with
         | Simple simple, Complex { Condition = Or; Predicates = predicates }
@@ -250,20 +263,29 @@ module DSL =
             { Condition = Or
               Predicates = [ x; y ] } |> Complex
     
+    /// Common equals.
     let inline (=.) a b = a ? (EqOp) <- b
     
+    /// Common not equals.
     let inline (!=.) a b = a ? (NotEq) <- b
     
+    /// Algebraic greater than.
     let inline (>.) a b = a ? (GreaterThenOp) <- b
     
+    /// 1) Algebraic greater then or equals. 2) Set contains.
     let inline (>=.) a b = a ? (GreaterThenOrEqualsOp) <- b
     
+    /// Algebraic less than.
     let inline (<.) a b = a ? (LessThenOp) <- b
     
+    /// 1) Algebraic less than or equals. 2) Set contained by.
     let inline (<=.) a b = a ? (LessThenOrEqualsOp) <- b
     
+    /// Arrays overlap.
     let inline (^.) a b = a ? (OverlapOp) <- b
     
+    /// String LIKE.
     let inline (=~.) a b = a ? (LikeOp) <- b
     
+    /// String ILIKE.
     let inline (=~*.) a b = a ? (ILikeOp) <- b

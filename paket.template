@@ -1,6 +1,6 @@
 type file
 id Plough.DynamicQuery
-version 0.4.4
+version 2.0.0
 authors Demetrix
 owners Demetrix
 title Plough.DynamicQuery

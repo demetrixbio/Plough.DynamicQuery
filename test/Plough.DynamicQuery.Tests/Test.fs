@@ -3,6 +3,10 @@
 open System
 open Plough.DynamicQuery
 
+type TagId = TagId of int
+module TagId =
+    let get = function TagId id -> id
+
 type TestPredicate =
     | Id of Operation.Int
     | Reference of Operation.Int
@@ -51,6 +55,8 @@ let query (record : TestRecord) : Filter<TestPredicate> =
         ]
         
         Created >=. DateTime.Now.AddYears(-1)
+        
+        TagAssignments ^. [| 1; 2; 3 |]
         
         Deleted =. true
     ]
